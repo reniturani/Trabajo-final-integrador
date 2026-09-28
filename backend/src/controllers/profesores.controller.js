@@ -1,4 +1,4 @@
-const Profesor = require('backend\src\models\profesores.js'); 
+const Profesor = require('../models/profesores.js');
 
 // GET: obtener todos los profesores
 const obtenerProfesores = async (req, res) => {
