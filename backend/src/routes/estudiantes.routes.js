@@ -2,8 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    obtenerEstudiantes
-} = require('../controllers/estudiantes.controller');
+    obtenerEstudiantes,
+    obtenerEstudiantePorId,
+    crearEstudiante,
+    actualizarEstudiante,
+    eliminarEstudiante
+} = require('../controllers/estudiantes.Controller');
 
 // GET: obtener todos los estudiantes
 router.get('/', obtenerEstudiantes);
@@ -13,5 +17,11 @@ router.get('/:id', obtenerEstudiantePorId);
 
 //POST : Crear un estudiante
 router.post('/', crearEstudiante);
+
+//PUT : Actualizar un estudiante existente
+router.put('/:id', actualizarEstudiante);
+
+//DELETE : Eliminar un estudiante
+router.delete('/:id', eliminarEstudiante);
 
 module.exports = router;

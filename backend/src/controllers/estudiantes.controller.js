@@ -118,26 +118,30 @@ const actualizarEstudiante = async (req, res) => {
         res.status(500).json({ mensaje: 'Error interno al actualizar el estudiante' });
     }
 }
-        
 
+// DELETE : Eliminamos un estudiante
+const eliminarEstudiante = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const estudiante = await Estudiante.findByPk(id);   
 
+        if (!estudiante) {
+            return res.status(404).json({ mensaje: 'Estudiante no encontrado' });
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        await estudiante.destroy();
+        res.status(200).json({ mensaje: 'Estudiante eliminado correctamente' });
+    } catch (error) {
+        console.error('Error al eliminar estudiante:', error);
+        res.status(500).json({ mensaje: 'Error interno al eliminar el estudiante' });
+    }
+}   
 
 module.exports = {
     obtenerEstudiantes,
-    obtenerEstudiantePorId
+    obtenerEstudiantePorId,
+    crearEstudiante,
+    actualizarEstudiante,
+    eliminarEstudiante
 };
 
