@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { obtenerProfesores, obtenerProfesorPorId, crearProfesor, actualizarProfesor, eliminarProfesor} = require('../controllers/profesores.controller');
+const { 
+    obtenerProfesores, obtenerProfesorPorId, crearProfesor, actualizarProfesor, eliminarProfesor
+} = require('../controllers/profesores.controller');
 
 // GET (ruta para ver todos)
 router.get('/', obtenerProfesores);
