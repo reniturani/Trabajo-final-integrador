@@ -11,4 +11,7 @@ router.get('/', obtenerEstudiantes);
 // GET : obtener un estudiante especifico por su ID
 router.get('/:id', obtenerEstudiantePorId);
 
+//POST : Crear un estudiante
+router.post('/', crearEstudiante);
+
 module.exports = router;
