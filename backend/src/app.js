@@ -3,11 +3,13 @@ const sequelize = require('./config/database');
 
 require('./models');
 const profesorRoutes = require('./routes/profesor.routes');
+const materiaRoutes = require('./routes/materias.routes');
 
 const app = express();
 app.use(express.json());
 
 app.use('/api/profesores', profesorRoutes);
+app.use('/api/materias', materiaRoutes);
 
 app.get('/', (req, res) => {
     res.send('Backend funcionando');
