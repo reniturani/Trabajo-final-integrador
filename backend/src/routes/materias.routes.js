@@ -2,19 +2,22 @@ const express = require('express');
 const router = express.Router();
 const { obtenerMaterias, obtenerMateriaPorId, crearMateria, actualizarMateria, eliminarMateria } = require('../controllers/materias.controller');
 
-// GET (ruta para obtener todas las materias)
+// importamos el middleware de autenticacion
+const { verificarToken } = require('../middlewares/auth.middleware');
+
+// GET (ruta para obtener todas las materias) - publica
 router.get('/', obtenerMaterias);
 
-// GET (ruta para obtener una materia por su ID)
+// GET (ruta para obtener una materia por su ID) - publica
 router.get('/:id', obtenerMateriaPorId);
 
-// POST (ruta para crear una nueva materia)
-router.post('/', crearMateria);
+// POST (ruta para crear una nueva materia) - protegida
+router.post('/', verificarToken, crearMateria);
 
-// PUT (ruta para actualizar una materia existente)
-router.put('/:id', actualizarMateria);
+// PUT (ruta para actualizar una materia existente) - protegida
+router.put('/:id', verificarToken, actualizarMateria);
 
-// DELETE (ruta para eliminar una materia)
-router.delete('/:id', eliminarMateria);
+// DELETE (ruta para eliminar una materia) - protegida
+router.delete('/:id', verificarToken, eliminarMateria);
 
 module.exports = router;
