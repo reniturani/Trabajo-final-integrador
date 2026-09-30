@@ -5,6 +5,7 @@ require('./models');
 const profesorRoutes = require('./routes/profesor.routes');
 const materiaRoutes = require('./routes/materias.routes');
 const profesorMateriaRoutes = require('./routes/profesorMateria.routes');
+const estudianteroutes = require('./routes/estudiantes.routes');
 
 const app = express();
 app.use(express.json());
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/api/profesores', profesorRoutes);
 app.use('/api/materias', materiaRoutes);
 app.use('/api', profesorMateriaRoutes);
+app.use('/api/estudiantes', estudianteroutes);
 
 app.get('/', (req, res) => {
     res.send('Backend funcionando');

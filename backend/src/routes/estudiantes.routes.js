@@ -7,7 +7,7 @@ const {
     crearEstudiante,
     actualizarEstudiante,
     eliminarEstudiante
-} = require('../controllers/estudiantes.Controller');
+} = require('../controllers/estudiantes.controller');
 
 // GET: obtener todos los estudiantes
 router.get('/', obtenerEstudiantes);
