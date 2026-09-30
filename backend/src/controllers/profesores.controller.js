@@ -45,6 +45,11 @@ const crearProfesor = async (req, res) => {
             return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
         }
 
+        // validacion: el precio no puede ser menor a 0
+        if (precio_hora < 0) {
+            return res.status(400).json({ mensaje: 'El precio por hora no puede ser negativo' });
+        }
+
         // encriptar la contraseña
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -72,6 +77,11 @@ const actualizarProfesor = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre, apellido, email, password, descripcion, precio_hora, modalidad, ubicacion, foto_url } = req.body;
+        
+        // validacion: si ingresan un precio, que no sea negativo
+        if (precio_hora !== undefined && precio_hora < 0) {
+            return res.status(400).json({ mensaje: 'El precio por hora no puede ser negativo' });
+        }
 
         const profesor = await Profesor.findByPk(id);
         if (!profesor) {
