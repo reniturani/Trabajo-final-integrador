@@ -39,46 +39,67 @@ const obtenerEstudiantePorId = async (req, res) => {
     }
 }
 
-// POST : Creamos un estudiante
+// POST: crear un estudiante
 const crearEstudiante = async (req, res) => {
     try {
-        const { nombre, apellido, email, password, descripcion, 
-            precio_hora, modalidad, ubicacion, foto_url 
+        const {
+            nombre,
+            apellido,
+            email,
+            password,
+            foto_url
         } = req.body;
 
-        // validacion basica
-        if (!nombre || !apellido || !email || !password || !descripcion || !precio_hora || !modalidad) {
-            return res.status(400).json({ mensaje: 'Faltan campos obligatorios' });
+        // Validación básica
+        if (!nombre || !apellido || !email || !password) {
+            return res.status(400).json({
+                mensaje: 'Faltan campos obligatorios'
+            });
         }
 
-        // encriptar la contraseña
+        // Encriptar la contraseña
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // guardar en la base de datos
+        // Guardar en la base de datos
         const nuevoEstudiante = await Estudiante.create({
-            nombre, apellido, email, password: hashedPassword, descripcion, precio_hora, modalidad, ubicacion, foto_url
+            nombre,
+            apellido,
+            email,
+            password: hashedPassword,
+            foto_url
         });
 
         res.status(201).json({
-            mensaje: 'Estudiante creado con exito',
-            estudiante: { id_estudiante: nuevoEstudiante.id_estudiante, nombre: nuevoEstudiante.nombre, email: nuevoEstudiante.email }
+            mensaje: 'Estudiante creado con éxito',
+            estudiante: {
+                id_estudiante: nuevoEstudiante.id_estudiante,
+                nombre: nuevoEstudiante.nombre,
+                email: nuevoEstudiante.email
+            }
         });
+
     } catch (error) {
         console.error('Error al crear estudiante:', error);
+
         if (error.name === 'SequelizeUniqueConstraintError') {
-            return res.status(400).json({ mensaje: 'El email ya esta registrado' });
+            return res.status(400).json({
+                mensaje: 'El email ya está registrado'
+            });
         }
-        res.status(500).json({ mensaje: 'Error interno al crear el estudiante' });
+
+        res.status(500).json({
+            mensaje: 'Error interno al crear el estudiante'
+        });
     }
-}
+};
 
 // PUT : Actualizamos un estudiante
 const actualizarEstudiante = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nombre, apellido, email, password, descripcion,
-        precio_hora, modalidad, ubicacion, foto_url 
+        const { nombre, apellido, email, password,
+        foto_url 
         } = req.body;
 
         const estudiante = await Estudiante.findByPk(id);
@@ -99,10 +120,6 @@ const actualizarEstudiante = async (req, res) => {
             apellido: apellido || estudiante.apellido,
             email: email || estudiante.email,
             password: hashedPassword,
-            descripcion: descripcion || estudiante.descripcion,
-            precio_hora: precio_hora || estudiante.precio_hora,
-            modalidad: modalidad || estudiante.modalidad,
-            ubicacion: ubicacion || estudiante.ubicacion,
             foto_url: foto_url || estudiante.foto_url
         });
 
