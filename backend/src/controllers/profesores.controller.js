@@ -1,12 +1,49 @@
 const Profesor = require('../models/profesores.js');
+const Materia = require('../models/materia.js');
 const bcrypt = require('bcrypt');
 
 // GET: obtener todos los profesores
 const obtenerProfesores = async (req, res) => {
     try {
+        // obtenemos la modalidad y/o materia de la consulta si es que se enviaron
+        const { modalidad, materia } = req.query; 
+
+        // validar que los filtros no estén vacíos
+        if (modalidad !== undefined && !modalidad.trim()) {
+            return res.status(400).json({ mensaje: 'La modalidad no puede estar vacía' });
+        }
+
+        if (materia !== undefined && !materia.trim()) {
+            return res.status(400).json({ mensaje: 'La materia no puede estar vacía' });
+        }
+
+        // validar que existan
+        if (modalidad && !await Profesor.findOne({ where: { modalidad } })) {
+            return res.status(404).json({ mensaje: 'La modalidad no existe' });
+        }
+
+        if (materia && !await Materia.findOne({ where: { nombre: materia } })) {
+            return res.status(404).json({ mensaje: 'La materia no existe' });
+        }
+
+
         const profesores = await Profesor.findAll({
-            attributes: { exclude: ['password'] }
+            // filtramos por modalidad y/o materia si se enviaron esos filtros, si no, devolvemos todos los profesores
+            where: modalidad ? { modalidad } : {},
+            attributes: { exclude: ['password'] },
+            include: materia ? [{
+                model: Materia,
+                where: { nombre: materia },
+            }] : []
         });
+
+        // los filtros existen, pero no hay profesores que coincidan
+        if ((modalidad || materia) && profesores.length === 0) {
+            return res.status(404).json({
+                mensaje: 'No se encontraron profesores para los filtros indicados'
+            });
+        }
+
         res.status(200).json(profesores);
     } catch (error) {
         console.error('Error al obtener profesores:', error);
