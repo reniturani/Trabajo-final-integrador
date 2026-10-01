@@ -1,16 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { obtenerProfesores, obtenerProfesorPorId, crearProfesor, actualizarProfesor, eliminarProfesor} = require('../controllers/profesores.controller');
+const { 
+    obtenerProfesores, obtenerProfesorPorId, crearProfesor, actualizarProfesor, eliminarProfesor
+} = require('../controllers/profesores.controller');
 
-// GET (ruta para ver todos)
+// importamos el middleware de autenticacion
+const { verificarToken } = require('../middlewares/auth.middleware');
+
+// GET (ruta para ver todos) - publica
 router.get('/', obtenerProfesores);
-// GET (ruta para ver uno solo)
+
+// GET (ruta para ver uno solo) - publica
 router.get('/:id', obtenerProfesorPorId);
-// POST 
+
+// POST (registro) - publica
 router.post('/', crearProfesor);
-// PUT 
-router.put('/:id', actualizarProfesor);
-// DELETE
-router.delete('/:id', eliminarProfesor);
+
+// PUT (actualizar) - protegida
+router.put('/:id', verificarToken, actualizarProfesor);
+
+// DELETE (eliminar) - protegida
+router.delete('/:id', verificarToken, eliminarProfesor);
 
 module.exports = router;
